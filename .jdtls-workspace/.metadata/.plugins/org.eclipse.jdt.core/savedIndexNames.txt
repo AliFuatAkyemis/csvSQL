@@ -1,4 +1,0 @@
-INDEX VERSION 1.134+/home/alifuat/Git/csvSQL/.jdtls-workspace/.metadata/.plugins/org.eclipse.jdt.core
-3842426239.index
-1865797976.index
-900586112.index
