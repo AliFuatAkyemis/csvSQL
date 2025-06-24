@@ -172,3 +172,6 @@ org.eclipse.core.internal.resources.ResourceException: '/home/alifuat/Git/csvSQL
 
 !ENTRY org.eclipse.jdt.ls.core 1 0 2025-06-24 20:09:47.767
 !MESSAGE Validated 1. Took 14 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2025-06-24 20:12:40.358
+!MESSAGE Clearing problems for /Table.java

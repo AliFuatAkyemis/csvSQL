@@ -16,11 +16,6 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>src/items/Table.java</name>
-			<type>1</type>
-			<location>//home/alifuat/Git/csvSQL/src/items/Table.java</location>
-		</link>
-		<link>
 			<name>src/main/Main.java</name>
 			<type>1</type>
 			<location>//home/alifuat/Git/csvSQL/src/main/Main.java</location>
