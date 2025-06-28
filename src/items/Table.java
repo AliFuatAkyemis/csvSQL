@@ -18,17 +18,23 @@ public class Table {
         private String[][] records; //For records of column attributes
 
         //Constructor
-        public Table(String filename, String tableName){
-                //Initializing the table
-                this.filename = filename;
-                this.tableName = tableName;
-                
-                //Check for file existence
-                loadTable();
+        public Table(String filename){ 
+                this.filename = filename; //Initializing the table
+                loadTable(); //Load informations from file
         }
 
         //----------------Required methods------------------//
-       
+        
+        //Setter method for tableName
+        public void setTableName(String tableName) {
+                this.tableName = tableName;
+        }
+
+        //Getter method for tableName
+        public String getTableName() {
+                return this.tableName;
+        }
+
         //Add method to add a new column to table
         public void addColumn(String columnName) { //Time Complexity -> O(n)
                 loadTable(); //Refresh informations from file
@@ -62,9 +68,13 @@ public class Table {
                         }
                 }
 
-                //Size adjustment
-                columns = Utility.copyArray(columns, new String[columns.length-1]);
-                records = Utility.copyArray2D(records, new String[records.length][columns.length-1]);
+                if (state) {
+                        int col = columns.length-1;
+
+                        //Size adjustment
+                        columns = Utility.copyArray(columns, new String[col]);
+                        records = Utility.copyArray2D(records, new String[records.length][col]);
+                }
 
                 syncTable(); //Apply changes to file
         }
@@ -118,13 +128,15 @@ public class Table {
         private void syncTable() { //Time Complexity -> O(n)
                 try {
                         BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
-                        writer.write(String.join(",", columns) + "\n"); //Column names
+                        String str = ""; //Text container
+                        
+                        str += String.join(",", columns) + "\n"; //Column names
                        
-                        //Records
                         for (String[] row : records) {
-                                writer.write(String.join(",", row) + "\n");
+                                str += String.join(",", row) + "\n"; //Records
                         }
 
+                        writer.write(str.trim()); //Writting by trim()
                         writer.close();
                 } catch (IOException e) {
                         e.printStackTrace();
