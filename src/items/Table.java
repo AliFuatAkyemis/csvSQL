@@ -30,7 +30,7 @@ public class Table {
         //----------------Required methods------------------//
        
         //Add method to add a new column to table
-        public void addColumn(String columnName) {
+        public void addColumn(String columnName) { //Time Complexity -> O(n)
                 loadTable(); //Refresh informations from file
                 
                 //Check for duplicate
@@ -46,11 +46,27 @@ public class Table {
         }
 
         //Drop method to drop a column entirely
-        public void dropColumn(String columnName) {
-                loadTable();
+        public void dropColumn(String columnName) { //Time Complexity -> O(n^2)
+                loadTable(); //Refresh informations from file
+
+                //Search phase
+                boolean state = false; //Switch state to control program flow during search action
+                for (int i = 0; i < columns.length; i++) {
+                        if (!state) state = columns[i].equals(columnName) ? true : false; //Check
+                        else {
+                                //Tilting rest of the columns through the deleted column's space
+                                columns[i-1] = columns[i];
+                                for (String[] record : records) {
+                                        record[i-1] = record[i];
+                                }
+                        }
+                }
+
+                //Size adjustment
                 columns = Utility.copyArray(columns, new String[columns.length-1]);
                 records = Utility.copyArray2D(records, new String[records.length][columns.length-1]);
-                syncTable();
+
+                syncTable(); //Apply changes to file
         }
 
         //Insert method to insert a new record
@@ -60,7 +76,7 @@ public class Table {
         public void delete(String columnName, String value) {}
 
         //Table load method to update informations from file
-        private void loadTable() {
+        private void loadTable() { //Time Complexity -> O(n)
                 try {
                         int col = Utility.getColumnCount(filename), row = Utility.getRowCount(filename); //Determining table size
         
@@ -98,8 +114,8 @@ public class Table {
                 }
         }
 
-        //Table syncronize method to update .csv file
-        private void syncTable() {
+        //Table syncronize method to update file content
+        private void syncTable() { //Time Complexity -> O(n)
                 try {
                         BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
                         writer.write(String.join(",", columns) + "\n"); //Column names

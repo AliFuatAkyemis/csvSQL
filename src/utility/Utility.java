@@ -9,7 +9,7 @@ public class Utility {
         //---------------Static Utility Methods--------------//
 
         //Table row counter
-        public static int getRowCount(String filename) {
+        public static int getRowCount(String filename) { //Time Complexity -> O(n)
                 try {
                         File file = new File(filename);
                         if (!file.exists()) return 0;
@@ -34,7 +34,7 @@ public class Utility {
         }
 
         //Table column counter
-        public static int getColumnCount(String filename) {
+        public static int getColumnCount(String filename) { //Time Complexity -> O(1)
                 try {
                         File file = new File(filename);
                         if (!file.exists()) return 0;
@@ -53,7 +53,7 @@ public class Utility {
         }
 
         //Array copy method for 1D arrays
-        public static String[] copyArray(String[] arr, String[] newArr) {
+        public static String[] copyArray(String[] arr, String[] newArr) { //Time Complexity -> O(n)
                 for (int i = 0; i < arr.length && i < newArr.length; i++) {
                         newArr[i] = arr[i];
                 }
@@ -62,7 +62,7 @@ public class Utility {
         }
 
         //Array copy method for 2D arrays
-        public static String[][] copyArray2D(String[][] arr, String[][] newArr) {
+        public static String[][] copyArray2D(String[][] arr, String[][] newArr) { //Time Complexity -> O(n^2)
                 for (int i = 0; i < arr.length && i < newArr.length; i++) {
                         newArr[i] = copyArray(arr[i], newArr[i]);
                 }
