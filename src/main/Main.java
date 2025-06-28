@@ -7,6 +7,7 @@ public class Main {
                 Table t = new Table("deneme.csv", "test table");
                 t.addColumn("isim");
                 t.addColumn("soyisim");
+                t.addColumn("telefon");
                 t.addColumn("numara");
         }
 }

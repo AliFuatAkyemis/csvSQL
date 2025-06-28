@@ -31,15 +31,27 @@ public class Table {
        
         //Add method to add a new column to table
         public void addColumn(String columnName) {
-                loadTable();
+                loadTable(); //Refresh informations from file
+                
+                //Check for duplicate
+                for (String str : columns)
+                        if (str.equals(columnName)) return;
+
+                //Addition part
                 columns = Utility.copyArray(columns, new String[columns.length+1]);
                 records = Utility.copyArray2D(records, new String[records.length][columns.length+1]);
-                if (columns.length != 0) columns[columns.length-1] = columnName;
-                syncTable();
+                columns[columns.length-1] = columnName; //Update new column name
+                
+                syncTable(); //Apply changes to file
         }
 
         //Drop method to drop a column entirely
-        public void dropColumn(String columnName) {}
+        public void dropColumn(String columnName) {
+                loadTable();
+                columns = Utility.copyArray(columns, new String[columns.length-1]);
+                records = Utility.copyArray2D(records, new String[records.length][columns.length-1]);
+                syncTable();
+        }
 
         //Insert method to insert a new record
         public void insert(String[] values) {}
