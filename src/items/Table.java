@@ -7,6 +7,7 @@ import java.io.FileWriter;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.FileNotFoundException;
 
 public class Table {
         //Attributes
@@ -23,15 +24,18 @@ public class Table {
                 this.tableName = tableName;
                 
                 //Check for file existence
-                if (new File(filename).exists()) loadTable();
-                else createTable();
+                loadTable();
         }
 
         //----------------Required methods------------------//
        
         //Add method to add a new column to table
         public void addColumn(String columnName) {
-
+                loadTable();
+                columns = Utility.copyArray(columns, new String[columns.length+1]);
+                records = Utility.copyArray2D(records, new String[records.length][columns.length+1]);
+                if (columns.length != 0) columns[columns.length-1] = columnName;
+                syncTable();
         }
 
         //Drop method to drop a column entirely
@@ -43,19 +47,24 @@ public class Table {
         //Delete method to delete a record
         public void delete(String columnName, String value) {}
 
-        //Table load function to update informations from file
+        //Table load method to update informations from file
         private void loadTable() {
-                int col = Utility.getColumnCount(filename), row = Utility.getRowCount(filename); //Determining table size
-
-                //Initializing table space
-                columns = new String[col];
-                records = new String[col][row];
-
-                //Read and load part
                 try {
-                        BufferedReader reader = new BufferedReader(new FileReader(filename));
+                        int col = Utility.getColumnCount(filename), row = Utility.getRowCount(filename); //Determining table size
+        
+                        //Initializing table space
+                        columns = new String[col];
+                        records = new String[row][col];
 
+                        //Read and load part
+                        BufferedReader reader = new BufferedReader(new FileReader(filename));
                         String str = reader.readLine();
+
+                        if (str == null) {
+                                reader.close();
+                                return;
+                        }
+
                         columns = str.split(",");
                         str = reader.readLine();
 
@@ -64,27 +73,31 @@ public class Table {
                                 records[i++] = str.split(",");
                                 str = reader.readLine();
                         }
-
+                        
                         reader.close();
+                } catch (FileNotFoundException e) {
+                        try {
+                                new File(filename).createNewFile();
+                        } catch (IOException e2) {
+                                e.printStackTrace();
+                        }
                 } catch (IOException e) {
                         e.printStackTrace();
                 }
-        }
-
-        //Table create method for the sitch of non-existence
-        private void createTable() {
-                
         }
 
         //Table syncronize method to update .csv file
         private void syncTable() {
                 try {
                         BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
-                        writer.write(String.join(",", columns));
-                        
-                        for (int i = 0; i < records.length; i++) {
-                                writer.write(String.join(",", records[i]));
+                        writer.write(String.join(",", columns) + "\n"); //Column names
+                       
+                        //Records
+                        for (String[] row : records) {
+                                writer.write(String.join(",", row) + "\n");
                         }
+
+                        writer.close();
                 } catch (IOException e) {
                         e.printStackTrace();
                 }

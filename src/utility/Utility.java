@@ -1,5 +1,6 @@
 package utility;
 
+import java.io.File;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -10,7 +11,10 @@ public class Utility {
         //Table row counter
         public static int getRowCount(String filename) {
                 try {
-                        BufferedReader reader = new BufferedReader(new FileReader(filename));
+                        File file = new File(filename);
+                        if (!file.exists()) return 0;
+                        BufferedReader reader = new BufferedReader(new FileReader(file));
+                        reader.readLine();
                         String str = reader.readLine();
 
                         int i = 0;
@@ -26,36 +30,43 @@ public class Utility {
                         e.printStackTrace();
                 }
 
-                return -1;
+                return 0;
         }
 
         //Table column counter
         public static int getColumnCount(String filename) {
                 try {
-                        BufferedReader reader = new BufferedReader(new FileReader(filename));
+                        File file = new File(filename);
+                        if (!file.exists()) return 0;
+                        BufferedReader reader = new BufferedReader(new FileReader(file));
                         String str = reader.readLine();
 
                         reader.close();
 
+                        if (str == null) return 0;
                         return str.split(",").length;
                 } catch(IOException e) {
                         e.printStackTrace();
                 }
                 
-                return -1;
+                return 0;
         }
 
         //Array copy method for 1D arrays
-        public static void copyArray(String[] arr, String[] newArr) {
+        public static String[] copyArray(String[] arr, String[] newArr) {
                 for (int i = 0; i < arr.length && i < newArr.length; i++) {
                         newArr[i] = arr[i];
                 }
+
+                return newArr;
         }
 
         //Array copy method for 2D arrays
-        public static void copyArray2D(String[][] arr, String[][] newArr) {
+        public static String[][] copyArray2D(String[][] arr, String[][] newArr) {
                 for (int i = 0; i < arr.length && i < newArr.length; i++) {
-                        copyArray(arr[i], newArr[i]);
+                        newArr[i] = copyArray(arr[i], newArr[i]);
                 }
+
+                return newArr;
         }
 }
