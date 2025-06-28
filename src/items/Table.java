@@ -75,4 +75,18 @@ public class Table {
         private void createTable() {
                 
         }
+
+        //Table syncronize method to update .csv file
+        private void syncTable() {
+                try {
+                        BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
+                        writer.write(String.join(",", columns));
+                        
+                        for (int i = 0; i < records.length; i++) {
+                                writer.write(String.join(",", records[i]));
+                        }
+                } catch (IOException e) {
+                        e.printStackTrace();
+                }
+        }
 }
