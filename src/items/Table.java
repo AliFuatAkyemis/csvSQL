@@ -80,7 +80,13 @@ public class Table {
         }
 
         //Insert method to insert a new record
-        public void insert(String[] values) {}
+        public void insert(String[] values) {
+                loadTable(); //Refresh informaitons from file
+
+                //Insert Algorithm
+
+                syncTable(); //Apply changes to file
+        }
 
         //Delete method to delete a record
         public void delete(String columnName, String value) {}
