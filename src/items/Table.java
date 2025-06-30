@@ -80,16 +80,49 @@ public class Table {
         }
 
         //Insert method to insert a new record
-        public void insert(String[] values) {
+        public void insert(String[] values) { //Time Complexity -> O(n)
                 loadTable(); //Refresh informaitons from file
 
-                //Insert Algorithm
+                if (values.length != columns.length) return; //If values size doesn't match with columns size then, exit
+
+                records = Utility.copyArray2D(records, new String[records.length+1][columns.length]); //Resizing records array for new insertion
+                records[records.length-1] = values; //Insertion part
 
                 syncTable(); //Apply changes to file
         }
 
         //Delete method to delete a record
-        public void delete(String columnName, String value) {}
+        public void delete(String columnName, String value) { //Time Complexity -> O(n)
+                loadTable(); //Refresh informations from file
+
+                if (records.length == 0) return; //If table is empty then, exit
+
+                int k = -1; //A variable to point the desired column index with initial value of -1
+
+                //Column search
+                for (int i = 0; i < columns.length; i++) {
+                        if (columns[i].equals(columnName)) {
+                                k = i;
+                                break;
+                        }
+                }
+
+                if (k == -1) return; //If column not found then, exit
+
+                //Row search
+                for (int i = 0; i < records.length; i++) {
+                        //If value matches delete this row's informations
+                        if (records[i][k].equals(value)) {
+                                for (int j = i; j < records.length-1; j++) {
+                                        records[j] = records[j+1];
+                                }
+                        }
+                }
+
+                records = Utility.copyArray2D(records, new String[records.length-1][columns.length]); //Resizing to shrink array size
+
+                syncTable(); //Apply changes to file
+        }
 
         //Table load method to update informations from file
         private void loadTable() { //Time Complexity -> O(n)
