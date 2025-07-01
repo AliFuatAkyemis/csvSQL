@@ -124,6 +124,9 @@ public class Table {
                 syncTable(); //Apply changes to file
         }
 
+        //Select method to get informations
+        private void select() {}
+
         //Table load method to update informations from file
         private void loadTable() { //Time Complexity -> O(n)
                 try {
