@@ -125,7 +125,10 @@ public class Table {
         }
 
         //Select method to get informations
-        private void select() {}
+        public void select() {}
+
+        //Display method for representation of data
+        private void display(String[] columns, String[][] records) {}
 
         //Table load method to update informations from file
         private void loadTable() { //Time Complexity -> O(n)
