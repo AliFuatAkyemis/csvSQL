@@ -135,20 +135,35 @@ public class Table {
         public void select() {}
 
         //Display method for representation of data
-        public void display() {
-                int max = 0;
+        public void display() { //Time Complexity -> O(n^2)
+                loadTable(); //Refresh informations from file
+
+                int max = 0; //Max row size variable
+                
+                //Search for row that has maximum String length
                 for (String[] record : records) {
-                        int i = 0;
+                        int i = 0; //Counter for each row
+                        
+                        //Iterate for each row
                         for (String str : record) {
                                 i += str.length();
                         }
+
+                        //Update counter
                         if (i > max) max = i;
                 }
+
+                //Calculate actual needed length by adding other symbols length
                 max += 3*columns.length-2;
+
+                //Display part
+                //--------------Header----------------//
                 System.out.println("-".repeat(max));
                 String row = "| ";
                 for (String str : columns) row += (str + " | ");
                 System.out.println(row.trim());
+               
+                //-------------Body------------------//
                 System.out.println("-".repeat(max));
                 for (String[] record : records) {
                         row = "| ";
