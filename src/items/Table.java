@@ -134,18 +134,23 @@ public class Table {
         //Select method to get informations
         public void select() {}
 
+        //Overload for display(String[][] matrix)
+        public void display() {
+                display(records);
+        }
+
         //Display method for representation of data
-        public void display() { //Time Complexity -> O(n^2)
+        private void display(String[][] matrix) { //Time Complexity -> O(n^2)
                 loadTable(); //Refresh informations from file
 
                 int max = 0; //Max row size variable
                 
                 //Search for row that has maximum String length
-                for (String[] record : records) {
+                for (String[] arr : matrix) {
                         int i = 0; //Counter for each row
                         
                         //Iterate for each row
-                        for (String str : record) {
+                        for (String str : arr) {
                                 i += str.length();
                         }
 
@@ -154,7 +159,7 @@ public class Table {
                 }
 
                 //Calculate actual needed length by adding other symbols length
-                max += 3*columns.length-2;
+                max += 3*columns.length;
 
                 //Display part
                 //--------------Header----------------//
