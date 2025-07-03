@@ -55,6 +55,8 @@ public class Table {
         public void dropColumn(String columnName) { //Time Complexity -> O(n^2)
                 loadTable(); //Refresh informations from file
 
+                if (columns.length == 0) return;
+
                 //Search phase
                 boolean state = false; //Switch state to control program flow during search action
                 for (int i = 0; i < columns.length; i++) {
@@ -129,7 +131,27 @@ public class Table {
         }
 
         //Update method to update informations
-        public void update() {}
+        public void update(String columnName, String value, String updateParameter, String updateValue) {
+                loadTable(); //Refresh informations from file
+
+                if (records.length == 0) return; //If table is empty then, exit
+
+                int k = -1, n = -1; //Pointers for required columns
+                for (int i = 0; i < columns.length; i++) {
+                        //If found any match update parameters
+                        if (k == -1) k = columns[i].equals(columnName) ? i : -1; 
+                        if (n == -1) n = columns[i].equals(updateParameter) ? i : -1;
+                }
+
+                if (k == -1 || n == -1 || k == n) return; //Exit conditions (Not found etc.)
+
+                //Update part
+                for (String[] record : records) {
+                        if (record[k].equals(value)) record[n] = updateValue;
+                }
+
+                syncTable(); //Apply changes to file
+        }
 
         //Select method to get informations
         public void select() {}
@@ -145,14 +167,15 @@ public class Table {
 
                 int max = 0; //Max row size variable
                 
+                //Start with header String lenght
+                for (String str : columns) max += str.length();
+
                 //Search for row that has maximum String length
                 for (String[] arr : matrix) {
                         int i = 0; //Counter for each row
                         
                         //Iterate for each row
-                        for (String str : arr) {
-                                i += str.length();
-                        }
+                        for (String str : arr) i += str.length();
 
                         //Update counter
                         if (i > max) max = i;
