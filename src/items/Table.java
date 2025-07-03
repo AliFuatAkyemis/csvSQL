@@ -80,7 +80,7 @@ public class Table {
         }
 
         //Insert method to insert a new record
-        public void insert(String[] values) { //Time Complexity -> O(n)
+        public void insert(String... values) { //Time Complexity -> O(n)
                 loadTable(); //Refresh informaitons from file
 
                 if (values.length != columns.length) return; //If values size doesn't match with columns size then, exit
@@ -111,18 +111,25 @@ public class Table {
 
                 //Row search
                 for (int i = 0; i < records.length; i++) {
-                        //If value matches delete this row's informations
-                        if (records[i][k].equals(value)) {
-                                for (int j = i; j < records.length-1; j++) {
-                                        records[j] = records[j+1];
-                                }
-                        }
+                        if (records[i][k].equals(value)) records[i] = null; //Define as null to delete later
                 }
 
-                records = Utility.copyArray2D(records, new String[records.length-1][columns.length]); //Resizing to shrink array size
+                //Restructuring the records array
+                String[][] arr = new String[records.length][columns.length]; //Define a new array to use temporary space(This will replace the old array)
+                int n = 0; //Null counter
+                for (int i = 0, j = 0; i < records.length; i++) {
+                        if (records[i] != null) arr[j++] = records[i]; //Fill the new array
+                        else n++; //increment null counter
+                }
+                records = arr; //Replace
+
+                records = Utility.copyArray2D(records, new String[records.length-n][columns.length]); //Resizing to shrink array size
 
                 syncTable(); //Apply changes to file
         }
+
+        //Update method to update informations
+        public void update() {}
 
         //Select method to get informations
         public void select() {}
