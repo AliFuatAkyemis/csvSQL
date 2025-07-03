@@ -135,7 +135,29 @@ public class Table {
         public void select() {}
 
         //Display method for representation of data
-        private void display(String[] columns, String[][] records) {}
+        public void display() {
+                int max = 0;
+                for (String[] record : records) {
+                        int i = 0;
+                        for (String str : record) {
+                                i += str.length();
+                        }
+                        if (i > max) max = i;
+                }
+                max += 3*columns.length-2;
+                System.out.println("-".repeat(max));
+                String row = "| ";
+                for (String str : columns) row += (str + " | ");
+                System.out.println(row.trim());
+                System.out.println("-".repeat(max));
+                for (String[] record : records) {
+                        row = "| ";
+                        for (String str : record) row += (str + " | ");
+                        row = row.trim() + "\n";
+                        System.out.println(row.trim());
+                        System.out.println("-".repeat(max));
+                }
+        }
 
         //Table load method to update informations from file
         private void loadTable() { //Time Complexity -> O(n)
