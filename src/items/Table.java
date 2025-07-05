@@ -46,6 +46,7 @@ public class Table {
                 //Addition part
                 columns = Utility.copyArray(columns, new String[columns.length+1]);
                 records = Utility.copyArray2D(records, new String[records.length][columns.length+1]);
+
                 columns[columns.length-1] = columnName; //Update new column name
                 
                 syncTable(); //Apply changes to file
@@ -153,22 +154,67 @@ public class Table {
                 syncTable(); //Apply changes to file
         }
 
+        //Overload for select(String[] columnName, String[] values)
+        public String[][] select() {
+                loadTable(); //Refresh informations from file
+
+                display(); //Display all the informations
+
+                String[][] arr = Utility.copyArray2D(records, new String[records.length][columns.length]); //Clone records array to protect its reference from user
+
+                return arr; //Return clone array
+        }
+
         //Select method to get informations
-        public void select() {}
+        public String[][] select(String[] columnName, String[] values) {
+                loadTable(); //Refresh informations from file
+               
+                if (columnName == null || values == null);
+
+                int[] index = new int[columnName.length];
+                int n = 0;
+                for (int i = 0; i < columns.length; i++) {
+                        for (int k = 0; k < columnName.length; k++) {
+                                if (columns[i].equals(columnName[k])) index[n++] = i;
+                        }
+                }
+
+                if (n < columnName.length) return null;
+
+                String[][] response = new String[0][columns.length];
+                for (int i = 0, k = 0; i < records.length; i++) {
+                        boolean state = true;
+                        for (int j = 0; j < index.length; j++) {
+                                if (!records[i][index[j]].equals(values[j])) {
+                                        state = false;
+                                        break;
+                                }
+                        }
+                        
+                        if (state) {
+                                response = Utility.copyArray2D(response, new String[response.length+1][columns.length]);
+                                response[k++] = records[i];
+                        }
+                }
+                
+                display(columns, response);
+
+                return response;
+        }
 
         //Overload for display(String[][] matrix)
         public void display() {
-                display(records);
+                display(columns, records); //Assigned by default
         }
 
         //Display method for representation of data
-        private void display(String[][] matrix) { //Time Complexity -> O(n^2)
+        private void display(String[] attributes, String[][] matrix) { //Time Complexity -> O(n^2)
                 loadTable(); //Refresh informations from file
 
                 int max = 0; //Max row size variable
                 
                 //Start with header String lenght
-                for (String str : columns) max += str.length();
+                for (String str : attributes) max += str.length();
 
                 //Search for row that has maximum String length
                 for (String[] arr : matrix) {
@@ -188,12 +234,12 @@ public class Table {
                 //--------------Header----------------//
                 System.out.println("-".repeat(max));
                 String row = "| ";
-                for (String str : columns) row += (str + " | ");
+                for (String str : attributes) row += (str + " | ");
                 System.out.println(row.trim());
                
                 //-------------Body------------------//
                 System.out.println("-".repeat(max));
-                for (String[] record : records) {
+                for (String[] record : matrix) {
                         row = "| ";
                         for (String str : record) row += (str + " | ");
                         row = row.trim() + "\n";
