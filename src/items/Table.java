@@ -155,7 +155,7 @@ public class Table {
         }
 
         //Overload for select(String[] columnName, String[] values)
-        public String[][] select() {
+        public String[][] select() { //Time Complexity -> O(n)
                 loadTable(); //Refresh informations from file
 
                 display(); //Display all the informations
@@ -166,40 +166,49 @@ public class Table {
         }
 
         //Select method to get informations
-        public String[][] select(String[] columnName, String[] values) {
+        public String[][] select(String[] columnName, String[] values) { //Time Complexity -> O(n*m)
                 loadTable(); //Refresh informations from file
                
-                if (columnName == null || values == null);
+                if (columnName == null || values == null); //Check for exit state
 
-                int[] index = new int[columnName.length];
-                int n = 0;
+                int[] index = new int[columnName.length]; //New array to hold desired elements indexes
+
+                //Finding indexes
+                int n = 0; //Found attribute counter
                 for (int i = 0; i < columns.length; i++) {
+                        //Check each column if it is included in columnName array
                         for (int k = 0; k < columnName.length; k++) {
-                                if (columns[i].equals(columnName[k])) index[n++] = i;
+                                if (columns[i].equals(columnName[k])) index[n++] = i; //If required save its index
                         }
                 }
 
-                if (n < columnName.length) return null;
+                if (n < columnName.length) return null; //If desired attributes are missing then, exit
 
+                //Prepare a subarray with desired records
                 String[][] response = new String[0][columns.length];
                 for (int i = 0, k = 0; i < records.length; i++) {
-                        boolean state = true;
+                        //Elimination condition
+                        boolean state = true; //Control state for elimination
+
+                        //Just looking for required attributes
                         for (int j = 0; j < index.length; j++) {
                                 if (!records[i][index[j]].equals(values[j])) {
+                                        //If any of them doesn't then, match state -> false
                                         state = false;
                                         break;
                                 }
                         }
                         
+                        //Adding part
                         if (state) {
                                 response = Utility.copyArray2D(response, new String[response.length+1][columns.length]);
                                 response[k++] = records[i];
                         }
                 }
                 
-                display(columns, response);
+                display(columns, response); //Display response
 
-                return response;
+                return response; //Return resulted array
         }
 
         //Overload for display(String[][] matrix)
