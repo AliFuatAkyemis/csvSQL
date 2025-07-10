@@ -43,9 +43,11 @@ public class Table {
                 for (String str : columns)
                         if (str.equals(columnName)) return;
 
+                int col = columns.length; //Get size of column size
+
                 //Addition part
-                columns = Utility.copyArray(columns, new String[columns.length+1]);
-                records = Utility.copyArray2D(records, new String[records.length][columns.length+1]);
+                columns = Utility.copyArray(columns, new String[col+1]);
+                records = Utility.copyArray2D(records, new String[records.length][col+1]);
 
                 columns[columns.length-1] = columnName; //Update new column name
                 
