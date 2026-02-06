@@ -1,82 +1,140 @@
-## csvSQL
-A database manager that is created for my personal use.
+# <p align="center"><img src="assets/logo.png" alt="csvSQL Logo" width="300"></p>
 
-It has essential methods that is inspired from common sql dynamics.
+<p align="center">
+  <img src="https://img.shields.io/badge/Java-11%2B-ED8B00?style=for-the-badge&logo=java&logoColor=white" alt="Java Version">
+  <img src="https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge" alt="License">
+  <img src="https://img.shields.io/badge/Status-Active-brightgreen.svg?style=for-the-badge" alt="Status">
+</p>
 
-## Table Management System
+---
 
-A simple Java implementation for managing tabular data with file persistence.
+## 🚀 Overview
 
-## Features
+**csvSQL** is a lightweight, efficient Java-based database manager designed for personal data handling. It brings essential SQL-like dynamics to plain CSV files, merging the simplicity of text-based storage with the power of tabular data management.
 
-- Create and manage tables with columns and records
-- Add/drop columns
-- Insert/delete/update records
-- Select and display data
-- File-based persistence (CSV format)
-- Utility methods for array operations
+Developed with a focus on performance and ease of use, it allows you to manage datasets without the overhead of a full RDBMS.
 
-## Classes
+## 📑 Table of Contents
+- [Features](#-features)
+- [Quick Start](#-quick-start)
+- [Architecture](#-architecture)
+- [API Reference](#-api-reference)
+- [Usage Examples](#-usage-examples)
+- [Roadmap](#-roadmap)
+- [License](#-license)
 
-## Table Class
-Main class representing a table with:
-- File operations (load/sync)
-- Column management (add/drop)
-- Record operations (insert/delete/update/select)
-- Display functionality
+---
 
-## Utility Class
-Helper class with static methods for:
-- File operations (row/column counting)
-- Array operations (1D and 2D copying)
+## ✨ Features
 
-## Usage
+- 🛠️ **Full CRUD Operations**: Create, Read, Update, and Delete records with ease.
+- 📂 **Schema Evolution**: Dynamically add and drop columns without manual CSV editing.
+- 💾 **File Persistence**: Automatic synchronization between memory and CSV files.
+- 🔍 **Filtering & Selection**: SQL-like `select` methods with support for column/value filtering.
+- 📊 **Beautiful CLI Display**: Built-in automatic table formatting for console visualization.
+- ⚡ **Lightweight Utility**: Core helper methods optimized for array and file operations.
 
-1. Create a table: `Table myTable = new Table("data.csv");`
-2. Set table name: `myTable.setTableName("Employees");`
-3. Add columns: `myTable.addColumn("Name");`
-4. Insert records: `myTable.insert("John", "Doe", "30");`
-5. Query data: `String[][] results = myTable.select();`
+---
 
-## File Format
-Data is stored in CSV format:
-- First line contains column names
-- Subsequent lines contain records
+## 🏎️ Quick Start
 
-## Limitations
-- No data type validation
-- Basic error handling
-- No indexing or advanced query capabilities
+Get csvSQL running in your terminal in under a minute:
 
-## UML-Diagram
-classDiagram
-    class Utility {
-        <<utility>>
-        +getRowCount(String filename) int
-        +getColumnCount(String filename) int
-        +copyArray(String[] arr, String[] newArr) String[]
-        +copyArray2D(String[][] arr, String[][] newArr) String[][]
-    }
+1. **Clone & Build**:
+   ```bash
+   javac -d bin src/items/*.java src/main/*.java src/utility/*.java
+   ```
 
-    class Table {
-        -filename: String
-        -tableName: String
-        -columns: String[]
-        -records: String[][]
-        +Table(filename: String)
-        +setTableName(name: String)
-        +getTableName() String
-        +addColumn(columnName: String)
-        +dropColumn(columnName: String)
-        +insert(values: String...)
-        +delete(columnName: String, value: String)
-        +update(columnName: String, value: String, updateParameter: String, updateValue: String)
-        +select() String[][]
-        +select(columnName: String[], values: String[]) String[][]
-        +display()
-        -display(attributes: String[], matrix: String[][])
-        -loadTable()
-        -syncTable()
-    }
+2. **Run Demo**:
+   ```bash
+   java -cp bin main.Main
+   ```
 
-    Table --> Utility : uses
+3. **Try the Code**:
+   ```java
+   Table myTable = new Table("employees.csv");
+   myTable.setTableName("Engineering");
+   myTable.addColumn("Role");
+   myTable.insert("Alice", "BackEnd Developer", "Senior");
+   myTable.display();
+   ```
+
+---
+
+## 🏗️ Architecture
+
+The system is designed for modularity and minimal dependencies.
+
+```mermaid
+graph LR
+    A[Main.java] -- "Controls Flow" --> B[Table.java]
+    B -- "Uses Utility" --> C[Utility.java]
+    B -- "Sync/Load" --> D[(Data File)]
+    C -- "File Stats" --> D
+    
+    style B fill:#f9f,stroke:#333,stroke-width:2px
+    style D fill:#77f,stroke:#333,stroke-width:2px
+```
+
+---
+
+## 📚 API Reference
+
+### `Table` Class
+The core data management unit.
+
+| Method | Description | Complexity |
+| :--- | :--- | :--- |
+| `addColumn(String name)` | Adds a new column to the table. | O(n) |
+| `dropColumn(String name)` | Removes a column and tilts data. | O(n²) |
+| `insert(String... values)` | Appends a new record. | O(n) |
+| `delete(String col, String val)` | Deletes records matching criteria. | O(n) |
+| `update(String col, String val, String param, String newVal)` | Updates specific record fields. | O(n) |
+| `select()` | Retrieves all data & displays it. | O(n) |
+| `display()` | Formats and prints data to stdout. | O(n²) |
+
+### `Utility` Class
+Static helpers for low-level operations.
+- `getRowCount(String file)`: Efficiently counts file lines.
+- `copyArray2D(...)`: Fast cloning of multidimensional arrays.
+
+---
+
+## 💡 Usage Examples
+
+### Dynamic Filtering
+```java
+// Select records where "Department" is "IT"
+String[] filters = {"Department"};
+String[] values = {"IT"};
+String[][] itStaff = myTable.select(filters, values);
+```
+
+### Table Representation
+csvSQL automatically handles column alignment for you:
+```text
+---------------------------------
+| Name   | Role             |
+---------------------------------
+| Alice  | Senior Developer |
+---------------------------------
+```
+
+---
+
+## 🗺️ Roadmap
+
+- [ ] **SQL Query Parser**: Support for raw string queries (e.g., `SELECT * FROM table WHERE ...`).
+- [ ] **Data Typing**: Implement type validation (Integer, Double, Date).
+- [ ] **Indexing**: Add primary key indexing for O(1) searches.
+- [ ] **Export Options**: Support for JSON and XML exports.
+
+---
+
+## ⚖️ License
+
+Distributed under the MIT License. See `LICENSE` for more information.
+
+---
+
+<p align="center">Made with ❤️ by Ali Fuat Akyemis</p>
