@@ -72,8 +72,10 @@ graph LR
     B -- "Sync/Load" --> D[(Data File)]
     C -- "File Stats" --> D
     
-    style B fill:#f9f,stroke:#333,stroke-width:2px
-    style D fill:#77f,stroke:#333,stroke-width:2px
+    style A fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    style B fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    style C fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    style D fill:#bbdefb,stroke:#0d47a1,stroke-width:2px
 ```
 
 ---
