@@ -10,9 +10,7 @@
 
 ## 🚀 Overview
 
-**csvSQL** is a lightweight, efficient Java-based database manager designed for personal data handling. It brings essential SQL-like dynamics to plain CSV files, merging the simplicity of text-based storage with the power of tabular data management.
-
-Developed with a focus on performance and ease of use, it allows you to manage datasets without the overhead of a full RDBMS.
+**csvSQL** is a high-performance Java database engine that bridges the gap between simple flat-file storage and robust relational database management. It enables dynamic schema evolution and full CRUD operations directly on CSV files, providing a lightweight yet powerful solution for localized data management and persistence.
 
 ## 📑 Table of Contents
 - [Features](#-features)
